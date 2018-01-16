@@ -12,6 +12,8 @@ class liberty {
   boost::filesystem::path file() const { return m_file; };
   const ast::container &root() const { return m_root; };
 
+  void write(const boost::filesystem::path &file) const;
+
  private:
   boost::filesystem::path m_file;
   ast::container m_root;

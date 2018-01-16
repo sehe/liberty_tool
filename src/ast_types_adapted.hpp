@@ -15,17 +15,17 @@ BOOST_FUSION_ADAPT_STRUCT(
 // https://stackoverflow.com/a/19824426/9224499
 //BOOST_FUSION_ADAPT_STRUCT(
 //    liberty::ast::word_t,
-//    (std::string, word))
+//    (std::string, str))
 
 //BOOST_FUSION_ADAPT_STRUCT(
 //    liberty::ast::quoted_t,
-//    (std::string, quoted))
+//    (std::string, str))
 
 // Complex types
 BOOST_FUSION_ADAPT_STRUCT(
     liberty::ast::container,
     (std::string, name)
-    (std::vector<std::string>, arg)
+    (std::vector<std::string>, args)
     (std::vector<liberty::ast::element_t>, elements))
 
 BOOST_FUSION_ADAPT_STRUCT(

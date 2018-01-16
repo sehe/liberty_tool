@@ -25,15 +25,15 @@ struct liberty_grammar
     list = name >> '(' >> (value % ',') >> ')' >> ';';
     pair = name >> ':' > value > ';';
 
-    name = qi::lexeme[+(qi::alnum | '_')];
-    arg = qi::lexeme[+(qi::alnum | '_')];
+    name = qi::lexeme[+(qi::alnum | qi::string("_"))];
+    arg = qi::lexeme[+(qi::alnum | qi::string("_"))];
     value = unit | number | word | quoted;
 
     unit = qi::lexeme[qi::double_ >> +qi::alnum];
     number = qi::lexeme[qi::double_];
     // Workaround: No adapt for single member struct
     // https://stackoverflow.com/a/19824426/9224499
-    word = qi::as_string[qi::lexeme[+(qi::alnum | '_')]];
+    word = qi::as_string[qi::lexeme[+(qi::alnum | qi::string("_"))]];
     quoted = qi::as_string[qi::lexeme['"' >> *(qi::char_ - '"') > '"']];
 
     element.name("element");      // debug(element);

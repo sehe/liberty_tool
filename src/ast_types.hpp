@@ -16,17 +16,17 @@ struct unit_t {
 // Workaround: No adapt for single member struct
 // https://stackoverflow.com/a/19824426/9224499
 struct word_t {
-  std::string word;
+  std::string str;
 
   word_t() = default;
-  explicit word_t(std::string s) : word(std::move(s)) {}
+  explicit word_t(std::string s) : str(std::move(s)) {}
 };
 
 struct quoted_t {
-  std::string quoted;
+  std::string str;
 
   quoted_t() = default;
-  explicit quoted_t(std::string s) : quoted(std::move(s)) {}
+  explicit quoted_t(std::string s) : str(std::move(s)) {}
 };
 
 using value_t = boost::variant<unit_t, double, word_t, quoted_t>;
@@ -41,7 +41,7 @@ using element_t =
 
 struct container {
   std::string name;
-  std::vector<std::string> arg;
+  std::vector<std::string> args;
   std::vector<element_t> elements;
 };
 

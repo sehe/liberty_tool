@@ -15,18 +15,21 @@ int main(int argc, char **argv) {
     return -1;
   }
 
-  // read liberty file
+  // Read liberty file
   liberty::liberty lib{file};
 
-  // just for testing...
+  // Just for testing...
   std::cout << "Cells in root node:" << std::endl;
   for (auto &elem : lib.root().elements) {
     if (auto *c = boost::get<liberty::ast::container>(&elem)) {
       if (c->name == "cell") {
-        std::cout << c->arg.front() << std::endl;
+        std::cout << c->args.front() << std::endl;
       }
     }
   }
+
+  // Print to new liberty file
+  lib.write("out.lib");
 
   return 0;
 }
