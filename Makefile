@@ -2,7 +2,7 @@ CXXFLAGS := -std=c++14 -Wall
 LDFLAGS  := -lboost_system \
             -lboost_filesystem
 
-HEADERS  := $(wildcard src/*.h)
+HEADERS  := $(wildcard src/*.hpp)
 SOURCES  := $(wildcard src/*.cpp)
 OBJECTS  := $(patsubst src/%.cpp,build/%.o,$(SOURCES))
 
@@ -25,7 +25,7 @@ $(BUILDDIR)/%.o: src/%.cpp
 clean:
 	rm -rf $(BUILDDIR)
 
-.PHONY: docker
-docker:
-	docker build -t liberty .
-	docker run liberty
+# Clang Format - Settings in file .clang-format
+.PHONY: format
+format:
+	clang-format -i -style=file $(HEADERS) $(SOURCES)

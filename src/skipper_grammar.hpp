@@ -7,20 +7,20 @@
 
 namespace liberty {
 
-namespace qi    = boost::spirit::qi;
+namespace qi = boost::spirit::qi;
 namespace ascii = boost::spirit::ascii;
 
 template <typename iterator>
 struct skipper_grammar : qi::grammar<iterator> {
-    skipper_grammar() : skipper_grammar::base_type(skip) {
-        skip    = ascii::space | comment | escaped;
-        comment = qi::lit("/*") >> *(qi::char_ - "*/") >> "*/";
-        escaped = '\\' >> qi::eol;
-    }
+  skipper_grammar() : skipper_grammar::base_type(skip) {
+    skip = ascii::space | comment | escaped;
+    comment = qi::lit("/*") >> *(qi::char_ - "*/") >> "*/";
+    escaped = '\\' >> qi::eol;
+  }
 
-    qi::rule<iterator> skip;
-    qi::rule<iterator> comment;
-    qi::rule<iterator> escaped;
+  qi::rule<iterator> skip;
+  qi::rule<iterator> comment;
+  qi::rule<iterator> escaped;
 };
 
-} // namespace liberty
+}  // namespace liberty

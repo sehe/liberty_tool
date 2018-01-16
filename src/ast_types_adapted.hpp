@@ -1,7 +1,9 @@
 #pragma once
 
-#include "ast_types.hpp"
 #include <boost/fusion/include/adapt_struct.hpp>
+#include "ast_types.hpp"
+
+// clang-format off
 
 // Simple types
 BOOST_FUSION_ADAPT_STRUCT(
@@ -35,3 +37,5 @@ BOOST_FUSION_ADAPT_STRUCT(
     liberty::ast::pair,
     (std::string, name)
     (liberty::ast::value_t, value))
+
+// clang-format on
