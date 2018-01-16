@@ -11,30 +11,30 @@ BOOST_FUSION_ADAPT_STRUCT(
     (double, number)
     (std::string, unit))
 
-// Workaround: No adapt for single member struct
+// Workaround: No adapt for single member structs
 // https://stackoverflow.com/a/19824426/9224499
 //BOOST_FUSION_ADAPT_STRUCT(
 //    liberty::ast::word_t,
-//    (std::string, str))
+//    (std::string, string))
 
 //BOOST_FUSION_ADAPT_STRUCT(
 //    liberty::ast::quoted_t,
-//    (std::string, str))
+//    (std::string, string))
 
 // Complex types
 BOOST_FUSION_ADAPT_STRUCT(
-    liberty::ast::container,
+    liberty::ast::container_t,
     (std::string, name)
     (std::vector<std::string>, args)
     (std::vector<liberty::ast::element_t>, elements))
 
 BOOST_FUSION_ADAPT_STRUCT(
-    liberty::ast::list,
+    liberty::ast::list_t,
     (std::string, name)
     (std::vector<liberty::ast::value_t>, values))
 
 BOOST_FUSION_ADAPT_STRUCT(
-    liberty::ast::pair,
+    liberty::ast::pair_t,
     (std::string, name)
     (liberty::ast::value_t, value))
 

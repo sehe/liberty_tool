@@ -11,16 +11,16 @@ class printer : public boost::static_visitor<void> {
  public:
   printer(std::ostream &os);
 
-  // value_t types
+  // value types
   void operator()(const ast::unit_t &unit);
   void operator()(const double d);
   void operator()(const ast::word_t &word);
   void operator()(const ast::quoted_t &quoted);
 
-  // element_t types
-  void operator()(const ast::container &container);
-  void operator()(const ast::list &list);
-  void operator()(const ast::pair &pair);
+  // element types
+  void operator()(const ast::container_t &container);
+  void operator()(const ast::list_t &list);
+  void operator()(const ast::pair_t &pair);
 
  private:
   std::ostream &out;

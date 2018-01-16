@@ -13,44 +13,44 @@ struct unit_t {
   std::string unit;
 };
 
-// Workaround: No adapt for single member struct
+// Workaround: No adapt for single member structs
 // https://stackoverflow.com/a/19824426/9224499
 struct word_t {
-  std::string str;
+  std::string string;
 
   word_t() = default;
-  explicit word_t(std::string s) : str(std::move(s)) {}
+  explicit word_t(std::string str) : string{std::move(str)} {}
 };
 
 struct quoted_t {
-  std::string str;
+  std::string string;
 
   quoted_t() = default;
-  explicit quoted_t(std::string s) : str(std::move(s)) {}
+  explicit quoted_t(std::string str) : string{std::move(str)} {}
 };
 
 using value_t = boost::variant<unit_t, double, word_t, quoted_t>;
 
 // Complex types
-struct container;
-struct list;
-struct pair;
+struct container_t;
+struct list_t;
+struct pair_t;
 
 using element_t =
-    boost::variant<boost::recursive_wrapper<container>, list, pair>;
+    boost::variant<boost::recursive_wrapper<container_t>, list_t, pair_t>;
 
-struct container {
+struct container_t {
   std::string name;
   std::vector<std::string> args;
   std::vector<element_t> elements;
 };
 
-struct list {
+struct list_t {
   std::string name;
   std::vector<value_t> values;
 };
 
-struct pair {
+struct pair_t {
   std::string name;
   value_t value;
 };

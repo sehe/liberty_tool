@@ -16,10 +16,10 @@ namespace qi = boost::spirit::qi;
 namespace ascii = boost::spirit::ascii;
 
 template <typename iterator>
-struct liberty_grammar
-    : qi::grammar<iterator, ast::container(), skipper_grammar<iterator>> {
-  liberty_grammar() : liberty_grammar::base_type(lib_file) {
-    lib_file = container > qi::eoi;
+struct liberty_grammar : qi::grammar<iterator, std::vector<ast::container_t>(),
+                                     skipper_grammar<iterator>> {
+  liberty_grammar() : liberty_grammar::base_type(libs) {
+    libs = +container > qi::eoi;
     element = container | list | pair;
     container = name >> '(' >> -(arg % ',') >> ')' >> '{' >> +element > '}';
     list = name >> '(' >> (value % ',') >> ')' >> ';';
@@ -45,22 +45,22 @@ struct liberty_grammar
     arg.name("arg");      // debug(arg);
     value.name("value");  // debug(value);
 
-    unit.name("unit");
-    number.name("number");
-    word.name("word");
-    quoted.name("quoted");
+    unit.name("unit");      // debug(unit);
+    number.name("number");  // debug(number);
+    word.name("word");      // debug(word);
+    quoted.name("quoted");  // debug(quoted);
 
     // Print error message on parse failure.
     qi::on_error<qi::fail>(
-        lib_file,
-        boost::phoenix::bind(on_error, qi::_1, qi::_2, qi::_3, qi::_4));
+        libs, boost::phoenix::bind(on_error, qi::_1, qi::_2, qi::_3, qi::_4));
   }
 
-  qi::rule<iterator, ast::container(), skipper_grammar<iterator>> lib_file;
+  qi::rule<iterator, std::vector<ast::container_t>(), skipper_grammar<iterator>>
+      libs;
   qi::rule<iterator, ast::element_t(), skipper_grammar<iterator>> element;
-  qi::rule<iterator, ast::container(), skipper_grammar<iterator>> container;
-  qi::rule<iterator, ast::list(), skipper_grammar<iterator>> list;
-  qi::rule<iterator, ast::pair(), skipper_grammar<iterator>> pair;
+  qi::rule<iterator, ast::container_t(), skipper_grammar<iterator>> container;
+  qi::rule<iterator, ast::list_t(), skipper_grammar<iterator>> list;
+  qi::rule<iterator, ast::pair_t(), skipper_grammar<iterator>> pair;
 
   qi::rule<iterator, std::string(), skipper_grammar<iterator>> name;
   qi::rule<iterator, std::string(), skipper_grammar<iterator>> arg;

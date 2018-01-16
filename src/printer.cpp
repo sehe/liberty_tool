@@ -4,21 +4,21 @@ namespace liberty {
 
 printer::printer(std::ostream &os) : out(os) {}
 
-// value_t types
+// value types
 void printer::operator()(const ast::unit_t &unit) {
   out << unit.number << unit.unit;
 }
 
 void printer::operator()(const double d) { out << d; }
 
-void printer::operator()(const ast::word_t &word) { out << word.str; }
+void printer::operator()(const ast::word_t &word) { out << word.string; }
 
 void printer::operator()(const ast::quoted_t &quoted) {
-  out << '"' << quoted.str << '"';
+  out << '"' << quoted.string << '"';
 }
 
-// element_t types
-void printer::operator()(const ast::container &container) {
+// element types
+void printer::operator()(const ast::container_t &container) {
   out << '\n'
       << std::string(tab_size * indent_level++, ' ') << container.name << '(';
   for (std::size_t i = 0; i < container.args.size(); ++i) {
@@ -30,7 +30,7 @@ void printer::operator()(const ast::container &container) {
   out << std::string(tab_size * --indent_level, ' ') << "}\n";
 }
 
-void printer::operator()(const ast::list &list) {
+void printer::operator()(const ast::list_t &list) {
   out << std::string(tab_size * indent_level, ' ') << list.name << '(';
   for (std::size_t i = 0; i < list.values.size(); ++i) {
     if (i != 0) out << ", ";
@@ -39,7 +39,7 @@ void printer::operator()(const ast::list &list) {
   out << ");\n";
 }
 
-void printer::operator()(const ast::pair &pair) {
+void printer::operator()(const ast::pair_t &pair) {
   out << std::string(tab_size * indent_level, ' ') << pair.name << " : ";
   boost::apply_visitor(*this, pair.value);
   out << " ;\n";
