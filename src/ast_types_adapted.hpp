@@ -5,7 +5,7 @@
 
 // clang-format off
 
-// Simple types
+// Value types
 BOOST_FUSION_ADAPT_STRUCT(
     liberty::ast::unit_t,
     (double, number)
@@ -21,7 +21,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 //    liberty::ast::quoted_t,
 //    (std::string, string))
 
-// Complex types
+// Element types
 BOOST_FUSION_ADAPT_STRUCT(
     liberty::ast::container_t,
     (std::string, name)

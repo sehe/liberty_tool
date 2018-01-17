@@ -12,8 +12,9 @@ int main(int argc, char **argv) {
   liberty::liberty lib{argv[1]};
 
   // Access element
-  auto aio22_pin_zn = lib["library:typical"]["cell:AOI22_X1"]["pin:ZN"];
-  std::cout << "Matched nodes: " << aio22_pin_zn.size() << std::endl;
+  auto zn_pins = lib["library:typical"]["cell:(.*)_X1"]["pin:ZN"];
+  std::cout << "ZN pins matched: " << zn_pins.size() << std::endl;
+  std::cout << zn_pins["direction|function"] << std::endl;
 
   // Just for testing:
   // Print to new liberty file
