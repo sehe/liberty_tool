@@ -15,7 +15,7 @@ OBJECTS  := $(patsubst src/%.cpp,build/%.o,$(SOURCES))
 
 BUILDDIR ?= build
 BINDIR   ?= bin
-PROGRAM  ?= test
+PROGRAM  ?= liberty_tool
 
 .PHONY: all
 all: $(BINDIR)/$(PROGRAM)
