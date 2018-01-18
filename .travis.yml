@@ -1,0 +1,11 @@
+language: c++
+
+# Use docker for testing because the
+# travis-ci environment is so outdated.
+sudo: required
+services:
+    - docker
+
+script:
+    - docker built -t liberty_tool .
+    - docker run liberty_tool
