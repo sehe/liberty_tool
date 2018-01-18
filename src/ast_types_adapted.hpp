@@ -37,5 +37,5 @@ BOOST_FUSION_ADAPT_STRUCT(
   liberty::ast::pair_t,
   (std::string, name)
   (liberty::ast::value_t, value))
-  
+
 // clang-format on

@@ -11,9 +11,9 @@ class node {
  public:
   node(std::vector<ast::element_t *> elements);
 
-  node operator[](const std::regex &regex);
-  node operator[](const std::string &regex) {
-    return operator[](std::regex{regex});
+  node operator[](const std::regex &pattern);
+  node operator[](const std::string &pattern) {
+    return operator[](std::regex{pattern});
   }
 
   auto begin() { return m_elements.begin(); }
@@ -26,13 +26,14 @@ class node {
   std::vector<ast::element_t *> m_elements;
 };
 
+// Reads and writes liberty files.
 class liberty {
  public:
   liberty(const boost::filesystem::path &file);
 
-  node operator[](const std::regex &regex);
-  node operator[](const std::string &regex) {
-    return operator[](std::regex{regex});
+  node operator[](const std::regex &pattern);
+  node operator[](const std::string &pattern) {
+    return operator[](std::regex{pattern});
   }
 
   boost::filesystem::path file() const { return m_file; };

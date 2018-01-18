@@ -11,37 +11,67 @@
 
 namespace liberty {
 namespace {
-// Checks if element matches given regex.
-class matcher : public boost::static_visitor<bool> {
+
+// Convert value to string for regex_matcher.
+class stringer : public boost::static_visitor<std::string> {
  public:
-  matcher(const std::regex &regex) : m_regex(regex) {}
+  // Value types
+  std::string operator()(const ast::unit_t &unit) const {
+    return std::to_string(unit.number) + unit.unit;
+  }
 
+  std::string operator()(const double d) const { return std::to_string(d); }
+
+  std::string operator()(const ast::word_t &word) const { return word.string; }
+
+  std::string operator()(const ast::quoted_t &quoted) const {
+    return quoted.string;  // no quotes added!
+  }
+};
+
+// Checks if element matches given regex.
+class regex_matcher : public boost::static_visitor<bool> {
+ public:
+  regex_matcher(const std::regex &pattern) : m_pattern(pattern) {}
+
+  // Element types
   bool operator()(const ast::container_t &container) const {
-    std::vector<std::string> ids{container.name};
-    for (auto &arg : container.args) ids.push_back(container.name + ':' + arg);
+    std::vector<std::string> targets{container.name};
+    for (std::size_t i = 0; i < container.args.size(); ++i)
+      targets.push_back(container.name + ':' + container.args[i]);
 
-    return std::any_of(ids.begin(), ids.end(), [&](const std::string &id) {
-      return std::regex_match(id, m_regex);
-    });
+    return std::any_of(targets.begin(), targets.end(),
+                       [&](const std::string &target) {
+                         return std::regex_match(target, m_pattern);
+                       });
   }
 
   bool operator()(const ast::list_t &list) const {
-    return std::regex_match(list.name, m_regex);
+    return std::regex_match(list.name, m_pattern);  // add values as well?
   }
 
   bool operator()(const ast::pair_t &pair) const {
-    return std::regex_match(pair.name, m_regex);
+    std::vector<std::string> targets{
+        pair.name,
+        pair.name + ':' + boost::apply_visitor(stringer{}, pair.value)};
+
+    return std::any_of(targets.begin(), targets.end(),
+                       [&](const std::string &target) {
+                         return std::regex_match(target, m_pattern);
+                       });
   }
 
  private:
-  const std::regex m_regex;
+  std::regex m_pattern;
 };
-}
+
+}  // namespace
 
 node::node(std::vector<ast::element_t *> elements) : m_elements(elements) {}
 
-node node::operator[](const std::regex &regex) {
-  // Get children from all (container) nodes
+node node::operator[](const std::regex &pattern) {
+  // Get children from all container nodes
+  // (Other node types don't have children)
   std::vector<ast::element_t *> children;
 
   for (auto elem_ptr : m_elements) {
@@ -50,12 +80,12 @@ node node::operator[](const std::regex &regex) {
     }
   }
 
-  // Filter children by regex
-  matcher match{regex};
+  // Filter gathered children by regex
+  regex_matcher matcher{pattern};
   std::vector<ast::element_t *> matched;
 
   for (auto &elem : children) {
-    if (boost::apply_visitor(match, *elem)) matched.push_back(elem);
+    if (boost::apply_visitor(matcher, *elem)) matched.push_back(elem);
   }
 
   return matched;
