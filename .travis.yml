@@ -7,5 +7,5 @@ services:
     - docker
 
 script:
-    - docker built -t liberty_tool .
+    - docker build -t liberty_tool .
     - docker run liberty_tool
