@@ -8,4 +8,4 @@ services:
 
 script:
     - docker build -t liberty_tool .
-    - docker run liberty_tool
+#   - docker run liberty_tool
