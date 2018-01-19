@@ -25,7 +25,7 @@ class node {
   auto end() { return m_elements.end(); }
   std::size_t size() const { return m_elements.size(); }
 
-  friend std::ostream &operator<<(std::ostream &, const node &);
+  friend std::ostream &operator<<(std::ostream &out, const node &n);
 
  private:
   std::vector<ast::element_t *> m_elements;

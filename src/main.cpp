@@ -20,6 +20,16 @@ int main(int argc, char **argv) {
   auto timingA1 = nand2_x1["pin:ZN"]["timing"]["related_pin:A1"].up();
   std::cout << timingA1 << std::endl;
 
+  // cell_rise is the rise delay through the cell based on the input slew and
+  // output load. rise_transition is the slew at the output pin based on the
+  // input slew and output load.
+  auto cell_rise = timingA1["cell_rise"];
+  auto rise_transition = timingA1["rise_transition"];
+  auto cell_fall = timingA1["cell_fall"];
+  auto fall_transition = timingA1["fall_transition"];
+  std::cout << cell_rise << rise_transition << cell_fall << fall_transition
+            << std::endl;
+
   // Print to new liberty file
   lib.write("out.lib");
 

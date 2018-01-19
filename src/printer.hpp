@@ -13,7 +13,7 @@ class printer : public boost::static_visitor<void> {
 
   // Value types
   void operator()(const ast::unit_t &unit);
-  void operator()(const double d);
+  void operator()(double number);
   void operator()(const ast::word_t &word);
   void operator()(const ast::quoted_t &quoted);
 

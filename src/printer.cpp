@@ -9,7 +9,7 @@ void printer::operator()(const ast::unit_t &unit) {
   m_out << unit.number << unit.unit;
 }
 
-void printer::operator()(const double d) { m_out << d; }
+void printer::operator()(double number) { m_out << number; }
 
 void printer::operator()(const ast::word_t &word) { m_out << word.string; }
 

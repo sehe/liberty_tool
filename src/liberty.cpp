@@ -32,7 +32,7 @@ class stringer : public boost::static_visitor<std::string> {
 // Checks if element matches given regex.
 class regex_matcher : public boost::static_visitor<bool> {
  public:
-  regex_matcher(const std::regex &pattern) : m_pattern(pattern) {}
+  regex_matcher(std::regex pattern) : m_pattern{std::move(pattern)} {}
 
   // Element types
   bool operator()(const ast::container_t &container) const {
@@ -137,7 +137,7 @@ liberty::liberty(const boost::filesystem::path &file) : m_file(file) {
   liberty_grammar<std::string::const_iterator> grammar;
   skipper_grammar<std::string::const_iterator> skipper;
 
-  ast::container_t root{"root"};  // store libraries as elements
+  ast::container_t root{"root", {}, {}};  // store libraries as elements
   auto it = source.begin(), end = source.end();
   const bool success =
       qi::phrase_parse(it, end, grammar, skipper, root.elements);
@@ -151,9 +151,9 @@ liberty::liberty(const boost::filesystem::path &file) : m_file(file) {
   m_parents.emplace(&m_root, &m_root);
 }
 
-node liberty::operator[](const std::regex &regex) {
+node liberty::operator[](const std::regex &pattern) {
   node root{{&m_root}, *this};
-  return root[regex];
+  return root[pattern];
 }
 
 void liberty::write(const boost::filesystem::path &file) const {
