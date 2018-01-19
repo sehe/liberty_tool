@@ -20,6 +20,7 @@ struct liberty_grammar : qi::grammar<iterator, std::vector<ast::container_t>(),
                                      skipper_grammar<iterator>> {
   liberty_grammar() : liberty_grammar::base_type(libs) {
     libs = +container > qi::eoi;
+
     element = container | list | pair;
     container = name >> '(' >> -(arg % ',') >> ')' >> '{' >> +element > '}';
     list = name >> '(' >> (value % ',') >> ')' >> ';';
@@ -57,6 +58,7 @@ struct liberty_grammar : qi::grammar<iterator, std::vector<ast::container_t>(),
 
   qi::rule<iterator, std::vector<ast::container_t>(), skipper_grammar<iterator>>
       libs;
+
   qi::rule<iterator, ast::element_t(), skipper_grammar<iterator>> element;
   qi::rule<iterator, ast::container_t(), skipper_grammar<iterator>> container;
   qi::rule<iterator, ast::list_t(), skipper_grammar<iterator>> list;
