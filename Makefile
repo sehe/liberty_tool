@@ -1,4 +1,4 @@
-CXXFLAGS := -std=c++14 -Wall
+CXXFLAGS := -std=c++14 -Wall -O2
 
 ifneq ($(LINK),STATIC)
 LDFLAGS  := -lboost_system \
