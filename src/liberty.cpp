@@ -65,9 +65,21 @@ class regex_matcher : public boost::static_visitor<bool> {
   std::regex m_pattern;
 };
 
+// Generates back references for walking up the tree.
+void generate_parents(std::map<ast::element_t *, ast::element_t *> &parents,
+                      ast::element_t &element) {
+  if (auto container_ptr = boost::get<ast::container_t>(&element)) {
+    for (auto &child : container_ptr->elements) {
+      parents.emplace(&child, &element);
+      generate_parents(parents, child);
+    }
+  }
+}
+
 }  // namespace
 
-node::node(std::vector<ast::element_t *> elements) : m_elements(elements) {}
+node::node(std::vector<ast::element_t *> elements, const liberty &lib)
+    : m_elements(std::move(elements)), m_lib(&lib) {}
 
 node node::operator[](const std::regex &pattern) {
   // Get children from all container nodes
@@ -88,7 +100,16 @@ node node::operator[](const std::regex &pattern) {
     if (boost::apply_visitor(matcher, *elem)) matched.push_back(elem);
   }
 
-  return matched;
+  return {matched, *m_lib};
+}
+
+node node::up() {
+  // Get parent for each element
+  std::vector<ast::element_t *> parents;
+  for (auto elem_ptr : m_elements)
+    parents.push_back(m_lib->m_parents.at(elem_ptr));
+
+  return {parents, *m_lib};
 }
 
 std::ostream &operator<<(std::ostream &out, const node &n) {
@@ -123,10 +144,15 @@ liberty::liberty(const boost::filesystem::path &file) : m_file(file) {
 
   if (!success || it != end) throw std::logic_error{"Parse unsuccessful!"};
   m_root = std::move(root);
+
+  // Generate back references for walking up the tree
+  generate_parents(m_parents, m_root);
+  // For completeness, add root as its own parent
+  m_parents.emplace(&m_root, &m_root);
 }
 
 node liberty::operator[](const std::regex &regex) {
-  node root{{&m_root}};
+  node root{{&m_root}, *this};
   return root[regex];
 }
 
