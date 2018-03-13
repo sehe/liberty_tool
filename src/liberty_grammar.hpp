@@ -22,7 +22,7 @@ struct liberty_grammar : qi::grammar<iterator, std::vector<ast::container_t>(),
     libs = +container > qi::eoi;
 
     element = container | list | pair;
-    container = name >> '(' >> -(arg % ',') >> ')' >> '{' >> +element > '}';
+    container = name >> '(' >> -(arg % ',') >> ')' >> ('{' > +element > '}');
     list = name >> '(' > (value % ',') > ')' > ';';
     pair = name >> ':' > value > ';';
 
