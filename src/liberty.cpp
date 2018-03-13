@@ -38,7 +38,8 @@ class regex_matcher : public boost::static_visitor<bool> {
   bool operator()(const ast::container_t &container) const {
     std::vector<std::string> targets{container.name};
     for (std::size_t i = 0; i < container.args.size(); ++i)
-      targets.push_back(container.name + ':' + container.args[i]);
+      targets.push_back(container.name + ':' +
+                        boost::apply_visitor(stringer{}, container.args[i]));
 
     return std::any_of(targets.begin(), targets.end(),
                        [&](const std::string &target) {

@@ -30,6 +30,7 @@ struct quoted_t {
   explicit quoted_t(std::string str) : string{std::move(str)} {}
 };
 
+using arg_t = boost::variant<word_t, quoted_t>;
 using value_t = boost::variant<unit_t, double, word_t, quoted_t>;
 
 // Element types
@@ -42,7 +43,7 @@ using element_t =
 
 struct container_t {
   std::string name;
-  std::vector<std::string> args;
+  std::vector<arg_t> args;
   std::vector<element_t> elements;
 };
 

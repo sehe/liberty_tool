@@ -23,11 +23,11 @@ struct liberty_grammar : qi::grammar<iterator, std::vector<ast::container_t>(),
 
     element = container | list | pair;
     container = name >> '(' >> -(arg % ',') >> ')' >> '{' >> +element > '}';
-    list = name >> '(' >> (value % ',') >> ')' >> ';';
+    list = name >> '(' > (value % ',') > ')' > ';';
     pair = name >> ':' > value > ';';
 
     name = qi::lexeme[+(qi::alnum | qi::string("_"))];
-    arg = qi::lexeme[+(qi::alnum | qi::string("_"))];
+    arg = word | quoted;
     value = unit | number | word | quoted;
 
     unit = qi::lexeme[qi::double_ >> +qi::alnum];
@@ -65,7 +65,7 @@ struct liberty_grammar : qi::grammar<iterator, std::vector<ast::container_t>(),
   qi::rule<iterator, ast::pair_t(), skipper_grammar<iterator>> pair;
 
   qi::rule<iterator, std::string(), skipper_grammar<iterator>> name;
-  qi::rule<iterator, std::string(), skipper_grammar<iterator>> arg;
+  qi::rule<iterator, ast::arg_t(), skipper_grammar<iterator>> arg;
   qi::rule<iterator, ast::value_t(), skipper_grammar<iterator>> value;
 
   qi::rule<iterator, ast::unit_t(), skipper_grammar<iterator>> unit;

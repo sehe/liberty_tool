@@ -25,7 +25,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
   liberty::ast::container_t,
   (std::string, name)
-  (std::vector<std::string>, args)
+  (std::vector<liberty::ast::arg_t>, args)
   (std::vector<liberty::ast::element_t>, elements))
 
 BOOST_FUSION_ADAPT_STRUCT(
