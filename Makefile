@@ -1,12 +1,17 @@
 CXXFLAGS := -std=c++14 -Wall -Wextra -O2
+BOOST_DIR=/home/sehe/custom/boost
+
+CXXFLAGS += -isystem $(BOOST_DIR)
 
 ifneq ($(LINK),STATIC)
-LDFLAGS  := -lboost_system \
+LDFLAGS  := -L$(BOOST_DIR)/stage/lib \
+			-Wl,-rpath,$(BOOST_DIR)/stage/lib \
+	        -lboost_system \
             -lboost_filesystem
 else
 LDFLAGS  := -static \
-            /usr/lib/x86_64-linux-gnu/libboost_system.a \
-            /usr/lib/x86_64-linux-gnu/libboost_filesystem.a
+            $(BOOST_DIR)/stage/lib/libboost_system.a \
+            $(BOOST_DIR)/stage/lib/libboost_filesystem.a
 endif
 
 BUILDDIR ?= build
